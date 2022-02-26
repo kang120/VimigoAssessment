@@ -1,0 +1,64 @@
+table{
+    margin: auto;
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+}
+
+th, td, tr{
+    border: 1px solid black;
+    padding: 15px;
+    text-align: center;
+}
+
+.overflow-cell{
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.btn-cell{
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 15px;
+}
+
+.btn{
+    border: none;
+    border-radius: 5%;
+    padding: 10px 15px;
+    color: white;
+}
+
+.btn:hover{
+    cursor: hand;
+}
+
+.btn-primary{
+    background: #007BFF;
+}
+
+.btn-primary:hover{
+    background: #2273c9;
+}
+
+.btn-warning{
+    background: #FFC107;
+    color: black;
+    margin-left: 10px;
+}
+
+.btn-warning:hover{
+    background: #deae1d;
+}
+
+.btn-danger{
+    background: #DC3545;
+    margin-left: 10px;
+}
+
+.btn-danger:hover{
+    background: #c93b36;
+}
