@@ -14,12 +14,6 @@
                 font-size: 3em;
                 padding: 15px 0;
             }
-
-            main{
-                padding-top: 50px;
-                padding-left: 15%;
-                padding-right: 15%;
-            }
         </style>
     </head>
 
