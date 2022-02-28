@@ -10,8 +10,8 @@
 
     <link rel="stylesheet" href="<?= base_url("css/post_list.css") ?>">
 
-    <div id="post_list">
-        <table id="post_table">
+    <div id="post-list">
+        <table id="post-table">
             <col width="8%">
             <col width="8%">
             <col width="32%">
@@ -39,18 +39,46 @@
         </div>
     </div>
 
-    <div id="view_modal">
-        <h2 id="post_id" style="text-align: center"></h2>
+    <div id="view-modal">
+        <h2 id="view-post-id" style="text-align: center"></h2>
         <div class="post-container">
-            <div class="title-box">
-                <div id="title"></div>
-                <div id="author"></div>
+            <div class="view-title-box">
+                <div id="view-title"></div>
+                <div id="view-author"></div>
             </div>
-            <div class="body-box">
-                <p id="body"></p>
+            <div class="view-body-box">
+                <p id="view-body"></p>
             </div>
         </div>
-        <div style="text-align: center; margin-top: 30px"><button class='btn btn-primary' onclick="close_modal()">Close</button></div>
+        <div style="text-align: center; margin-top: 30px"><button class='btn btn-primary' onclick="close_viewModal()">Close</button></div>
+    </div>
+
+    <div id="update-modal">
+        <h2 id="update-post-id" style="text-align: center"></h2>
+        <div id="update-author" style="text-align: center; font-size: 15px; margin-top: 5px;"></div>
+        <div style="margin-top: 30px; padding: 0 15px;">
+            <div style="font-size: 1.5em;"><b>Title:</b></div>
+            <textarea id="update-title"></textarea>
+            <div style="margin-top: 30px; font-size: 1.5em;"><b>Body:</b></div>
+            <textarea id="update-body"></textarea>
+        </div>
+        <div style="text-align: center; margin-top: 30px">
+            <button class='btn btn-primary' onclick="open_updateSubmitModal()">Update</button>
+            <button class='btn btn-secondary' style="margin-left: 25px;" onclick="close_updateModal()">Cancel</button>
+        </div>
+    </div>
+
+    <div id="update-submit-modal">
+        <div style="font-size: 1.3em">Are you sure to update the post?</div>
+        <div style="margin-top: 20px">
+            <button class='btn btn-warning' onclick="submit_update()">Confirm</button>
+            <button class='btn btn-secondary' style="margin-left: 25px;" onclick="close_updateSubmitModal()">Cancel</button>
+        </div>
+    </div>
+
+    <div id="update-result-modal">
+        <div style="font-size: 1.2em;"><b></b></div>
+        <div><button style="margin-top: 20px;" class='btn btn-primary' onclick="close_all_modal()">Close</button></div>
     </div>
 
     <script>
@@ -60,7 +88,7 @@
         const totalPagingBtn = 9;   // number of paging btns below the table
 
         function updateTable(data){
-            console.log(data.length);
+            console.log("Post per page: ", data.length);
             var table = document.getElementsByTagName("tbody")[0];
 
             table.innerHTML = "";   // clear the table
@@ -77,7 +105,7 @@
                 buttonDiv = document.createElement("div");
                 buttonDiv.className = "btn-cell";
                 buttonDiv.innerHTML += "<button class='btn btn-primary' onclick=view_post(" + data[i].id + ")>" + "View" + "</button>";
-                buttonDiv.innerHTML += "<button class='btn btn-warning'>" + "Update" + "</button>";
+                buttonDiv.innerHTML += "<button class='btn btn-warning' onclick=update_post(" + data[i].id + ")>" + "Update" + "</button>";
                 buttonDiv.innerHTML += "<button class='btn btn-danger'>" + "Delete" + "</button>";
                 buttonCell.appendChild(buttonDiv);
 
@@ -88,29 +116,123 @@
         }
 
         function view_post(post_id){
-            $("#post_list").css("opacity", 0.1);   // fade the table
-            $(".btn-cell button").css("cursor", "default");   // remove hand cursor on button
-            $(".btn-cell button").prop("disabled", true);   // disable the buttons function
-            
-            $("#view_modal").css("display", "block");   // show post modal
+            open_viewModal();
 
             for(let i = 0; i < postData.length; i++){
                 if(postData[i].id == post_id){
-                    $("#post_id").html("Post " + post_id);
-                    $("#title").html(postData[i].title);
-                    $("#author").html("Author: " + postData[i].user_id);
-                    $("#body").html(postData[i].body);
+                    $("#view-post-id").html("Post " + post_id);
+                    $("#view-title").html(postData[i].title);
+                    $("#view-author").html("Author: " + postData[i].user_id);
+                    $("#view-body").html(postData[i].body);
                     break;
                 }
             }
         }
 
-        function close_modal(){
-            $("#view_modal").css("display", "none");   // hide post modal
+        function update_post(post_id){
+            open_updateModal();
+
+            for(let i = 0; i < postData.length; i++){
+                if(postData[i].id == post_id){
+                    $("#update-post-id").html("Post " + post_id);
+                    $("#update-title").val(postData[i].title);
+                    $("#update-author").html("Author: " + postData[i].user_id);
+                    $("#update-body").val(postData[i].body);
+                    break;
+                }
+            }
+        }
+
+        function open_viewModal(){
+            $("#post-list").css("opacity", 0.1);   // fade the table
+            $(".btn-cell button").css("cursor", "default");   // remove hand cursor on button
+            $(".btn-cell button").prop("disabled", true);   // disable the buttons function
             
-            $("#post_list").css("opacity", 1);   // set the table opacity higher
+            $("#view-modal").css("display", "block");   // show post modal
+        }
+
+        function close_viewModal(){
+            $("#view-modal").css("display", "none");   // hide post modal
+            
+            $("#post-list").css("opacity", 1);   // set the table opacity higher
             $(".btn-cell button").css("cursor", "hand");   // set hand cursor on button
             $(".btn-cell button").prop("disabled", false);   // enable the buttons function
+        }
+
+        function open_updateModal(){
+            $("#post-list").css("opacity", 0.1);   // fade the table
+            $(".btn-cell button").css("cursor", "default");   // remove hand cursor on button
+            $(".btn-cell button").prop("disabled", true);   // disable the buttons function
+            
+            $("#update-modal").css("display", "block");   // show update post modal
+        }
+
+        function close_updateModal(){
+            $("#update-modal").css("display", "none");   // hide post modal
+            
+            $("#post-list").css("opacity", 1);   // set the table opacity higher
+            $(".btn-cell button").css("cursor", "hand");   // set hand cursor on button
+            $(".btn-cell button").prop("disabled", false);   // enable the buttons function
+        }
+
+        function open_updateSubmitModal(){
+            $("#update-modal").css("opacity", 0.8);   // fade the update modal
+            $("#update-modal button").css("cursor", "default");   // remove hand cursor on button
+            $("#update-modal button").prop("disabled", true);   // disable the buttons function
+            
+            $("#update-submit-modal").css("display", "flex");
+        }
+
+        function close_updateSubmitModal(){
+            $("#update-submit-modal").css("display", "none");   // hide post modal
+            
+            $("#update-modal").css("opacity", 1);   // set the update modal opacity higher
+            $("#update-modal button").css("cursor", "hand");   // set hand cursor on button
+            $("#update-modal button").prop("disabled", false);   // enable the buttons function
+        }
+
+        function open_updateResultModal(result){
+            $("#update-submit-modal").css("opacity", 0.8);   // fade the update confirm modal
+            $("#update-submit button").css("cursor", "default");   // remove hand cursor on button
+            $("#update-submit button").prop("disabled", true);   // disable the buttons function
+            
+            $("#update-result-modal").css("display", "block");
+
+
+            if(result == "success"){
+                $("#update-result-modal b").css("color", "green");
+                $("#update-result-modal b").html("Update Successfully");
+            }else{
+                $("#update-result-modal b").css("color", "red");
+                $("#update-result-modal b").html("Update Failed. Try Again Later");
+            }
+
+        }
+
+        function close_all_modal(){
+            $("#update-result-modal").css("display", "none");   // hide post modal
+
+            close_viewModal();
+            close_updateModal();
+            close_updateSubmitModal();
+            
+            AJAX_get_posts(currentPage);   // refresh table
+        }
+
+        function submit_update(){
+            var post_id = $("#update-post-id").html().split(" ")[1];
+            var post_author = $("#update-author").html().split(" ")[1];
+            var post_title = $("#update-title").val();
+            var post_body = $("#update-body").val();
+            
+            var data = {
+                "id": post_id,
+                "user_id": post_author,
+                "title": post_title,
+                "body": post_body
+            };
+
+            AJAX_update_posts(data);
         }
 
         function UI_setPagingButton(){
@@ -165,12 +287,32 @@
                 method: "GET",
                 success: function(data, status){
                     totalPages = xhr.getResponseHeader("X-Pagination-Pages");   // get total pages of posts
-                    console.log(totalPages);
+                    console.log("Total pages: ", totalPages);
                     postData = data;
                     updateTable(data);   // create a post table
                     UI_setPagingButton();
                 },
                 error: function(data){
+                    console.log("Something error");
+                }
+            });
+        }
+
+        function AJAX_update_posts(data){
+            // AJAX call to update post
+            $.ajax({
+                url: "https://gorest.co.in/public/v2/posts/" + data.id,
+                method: "PATCH",
+                dataType: 'json',
+                data: data,
+                headers: {
+                    "Authorization": "Bearer b16cef22dd918befa7ed4cad3bb4b161a66a0d49bb582845a8cd7a398b0e8a70"
+                },
+                success: function(data, status){
+                    open_updateResultModal("success");
+                },
+                error: function(data){
+                    open_updateResultModal("fail");
                     console.log("Something error");
                 }
             });

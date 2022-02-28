@@ -1,4 +1,4 @@
-#post_list{
+#post-list{
     padding-top: 50px;
     padding-left: 15%;
     padding-right: 15%;
@@ -52,6 +52,14 @@ th, td, tr{
     background: #2273c9;
 }
 
+.btn-secondary{
+    background: #a8a8a8;
+}
+
+.btn-secondary:hover{
+    background: #8c8b8b;   
+}
+
 .btn-warning{
     background: #FFC107;
     color: black;
@@ -103,7 +111,7 @@ th, td, tr{
     text-align: center;
 }
 
-#view_modal{
+#view-modal{
     display: none;
     position: fixed;
     top: 50%;
@@ -126,18 +134,18 @@ th, td, tr{
     word-wrap: normal;
 }
 
-.title-box{
+.view-title-box{
     font-size: 35px;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-#author{
+#view-author{
     font-size: 15px;
     margin-top: 10px;
     font-style: italic;
 }
 
-.body-box{
+.view-body-box{
     margin-top: 30px;
 }
 
@@ -148,4 +156,88 @@ th, td, tr{
 .post-container::-webkit-scrollbar-thumb{
     background: rgb(237, 239, 243);
     height: 50px;
+}
+
+#update-modal{
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    height: 70%;
+    background: #fcfcfc;
+    border: 2px solid black;
+    border-radius: 2%;
+    padding: 40px;
+}
+
+textarea{
+    width: 100%;
+    margin-top: 10px;
+}
+
+#update-title{
+    height: 20%;
+    font-size: 25px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    padding: 15px;
+    text-align: justify;
+    overflow-y: auto;
+}
+
+#update-body{
+    height: 45%;
+    padding: 15px;
+    text-align: justify;
+    overflow-y: auto;
+}
+
+#update-title::-webkit-scrollbar{
+    width: 10px;
+}
+
+#update-title::-webkit-scrollbar-thumb{
+    background: rgb(237, 239, 243);
+    height: 50px;
+}
+
+#update-body::-webkit-scrollbar{
+    width: 10px;
+}
+
+#update-body::-webkit-scrollbar-thumb{
+    background: rgb(237, 239, 243);
+    height: 50px;
+}
+
+#update-submit-modal{
+    display: none;
+    flex-direction: column;
+    text-align: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 15%;
+    height: 8%;
+    background: #fcfcfc;
+    border: 2px solid black;
+    border-radius: 2%;
+    padding: 40px;
+}
+
+#update-result-modal{
+    display: none;
+    text-align: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 15%;
+    height: 7%;
+    background: #fcfcfc;
+    border: 2px solid black;
+    border-radius: 2%;
+    padding: 40px;
 }
