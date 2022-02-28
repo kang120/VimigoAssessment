@@ -81,11 +81,26 @@
         <div><button style="margin-top: 20px;" class='btn btn-primary' onclick="close_all_modal()">Close</button></div>
     </div>
 
+    <div id="delete-modal">
+        <div style="font-size: 1.3em">Are you sure to delete the post?</div>
+        <div style="margin-top: 20px">
+            <button class='btn btn-warning' onclick="submit_delete()">Confirm</button>
+            <button class='btn btn-secondary' style="margin-left: 25px;" onclick="close_deleteModal()">Cancel</button>
+        </div>
+    </div>
+    
+    <div id="delete-result-modal">
+        <div style="font-size: 1.2em;"><b></b></div>
+        <div><button style="margin-top: 20px;" class='btn btn-primary' onclick="close_all_modal()">Close</button></div>
+    </div>
+
     <script>
         var postData;   // store all posts
         var totalPages;   // store total number of post pages
         var currentPage = 1;
         const totalPagingBtn = 9;   // number of paging btns below the table
+
+        var deletePostSelected = -1;
 
         function updateTable(data){
             console.log("Post per page: ", data.length);
@@ -106,7 +121,7 @@
                 buttonDiv.className = "btn-cell";
                 buttonDiv.innerHTML += "<button class='btn btn-primary' onclick=view_post(" + data[i].id + ")>" + "View" + "</button>";
                 buttonDiv.innerHTML += "<button class='btn btn-warning' onclick=update_post(" + data[i].id + ")>" + "Update" + "</button>";
-                buttonDiv.innerHTML += "<button class='btn btn-danger'>" + "Delete" + "</button>";
+                buttonDiv.innerHTML += "<button class='btn btn-danger' onclick=delete_post(" + data[i].id + ")>" + "Delete" + "</button>";
                 buttonCell.appendChild(buttonDiv);
 
                 row.appendChild(buttonCell);
@@ -141,6 +156,12 @@
                     break;
                 }
             }
+        }
+
+        function delete_post(post_id){
+            deletePostSelected = post_id;
+
+            open_deleteModal();
         }
 
         function open_viewModal(){
@@ -206,15 +227,63 @@
                 $("#update-result-modal b").css("color", "red");
                 $("#update-result-modal b").html("Update Failed. Try Again Later");
             }
+        }
 
+        function close_updateResultModal(){
+            $("#update-submit-modal").css("opacity", 1);   // set the update confirm modal opacity higher
+            $("#update-submit button").css("cursor", "hand");   // set hand cursor on button
+            $("#update-submit button").prop("disabled", false);   // enable the buttons function
+            
+            $("#update-result-modal").css("display", "none");
+        }
+
+        function open_deleteModal(){
+            $("#post-list").css("opacity", 0.1);   // fade the table
+            $(".btn-cell button").css("cursor", "default");   // remove hand cursor on button
+            $(".btn-cell button").prop("disabled", true);   // disable the buttons function
+            
+            $("#delete-modal").css("display", "block");   // show update post modal
+        }
+
+        function close_deleteModal(){
+            $("#post-list").css("opacity", 1);   // set the delete modal opacity higher
+            $("#post-list button").css("cursor", "hand");   // set hand cursor on button
+            $("#post-list button").prop("disabled", false);   // enable the buttons function
+
+            $("#delete-modal").css("display", "none");   // hide delete modal
+        }
+
+        function open_deleteResultModal(result){
+            $("#delete-modal").css("opacity", 0.8);   // fade the update confirm modal
+            $("#delete-modal button").css("cursor", "default");   // remove hand cursor on button
+            $("#delete-modal button").prop("disabled", true);   // disable the buttons function
+            
+            $("#delete-result-modal").css("display", "block");
+
+            if(result == "success"){
+                $("#delete-result-modal b").css("color", "green");
+                $("#delete-result-modal b").html("Delete Successfully");
+            }else{
+                $("#delete-result-modal b").css("color", "red");
+                $("#delete-result-modal b").html("Delete Failed. Try Again Later");
+            }
+        }
+
+        function close_deleteResultModal(){
+            $("#delete-modal").css("opacity", 1);   // set the delete modal opacity higher
+            $("#delete-modal button").css("cursor", "hand");   // set hand cursor on button
+            $("#delete-modal button").prop("disabled", false);   // enable the buttons function
+            
+            $("#delete-result-modal").css("display", "none");
         }
 
         function close_all_modal(){
-            $("#update-result-modal").css("display", "none");   // hide post modal
-
-            close_viewModal();
-            close_updateModal();
+            close_updateResultModal();
             close_updateSubmitModal();
+            close_updateModal();
+
+            close_deleteResultModal();
+            close_deleteModal();
             
             AJAX_get_posts(currentPage);   // refresh table
         }
@@ -234,6 +303,12 @@
 
             AJAX_update_posts(data);
         }
+
+        function submit_delete(){
+            AJAX_delete_posts(deletePostSelected);
+        }
+
+        
 
         function UI_setPagingButton(){
             if(currentPage == 1){
@@ -285,6 +360,9 @@
             var xhr = $.ajax({
                 url: "https://gorest.co.in/public/v2/posts?page=" + pageNumber,
                 method: "GET",
+                headers: {
+                    "Authorization": "Bearer b16cef22dd918befa7ed4cad3bb4b161a66a0d49bb582845a8cd7a398b0e8a70"
+                },
                 success: function(data, status){
                     totalPages = xhr.getResponseHeader("X-Pagination-Pages");   // get total pages of posts
                     console.log("Total pages: ", totalPages);
@@ -313,6 +391,24 @@
                 },
                 error: function(data){
                     open_updateResultModal("fail");
+                    console.log("Something error");
+                }
+            });
+        }
+
+        function AJAX_delete_posts(post_id){
+            // AJAX call to delete post
+            $.ajax({
+                url: "https://gorest.co.in/public/v2/posts/" + post_id,
+                method: "DELETE",
+                headers: {
+                    "Authorization": "Bearer b16cef22dd918befa7ed4cad3bb4b161a66a0d49bb582845a8cd7a398b0e8a70"
+                },
+                success: function(data, status){
+                    open_deleteResultModal("success");
+                },
+                error: function(data){
+                    open_deleteResultModal("fail");
                     console.log("Something error");
                 }
             });
