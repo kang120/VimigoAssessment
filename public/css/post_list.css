@@ -10,7 +10,7 @@
     align-items: center;
 }
 
-.searchbar{
+#searchbar{
     height: 30px;
     width: 350px;
     padding: 15px 5px;

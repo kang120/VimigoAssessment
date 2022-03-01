@@ -12,7 +12,14 @@
 
     <div id="post-list">
         <div class="search-box">
-            <div style="font-size: 1.2em">Search: <input class="searchbar" type="text"></div>
+            <div style="font-size: 1.2em">Search by
+            <select id="filter_type" style="height: 30px;" oninput="search_filter()">
+                <option value="id">POST ID</option>
+                <option value="user_id">USER ID</option>
+                <option value="title">TITLE</option>
+                <option value="body">BODY</option>
+            </select>
+            <input id="searchbar" type="text" oninput="search_filter()"></div>
             <button class="btn btn-success" style="margin-left: auto; margin-right: 30px;" onclick="open_createModal()">New Post</button>
         </div>
         <table id="post-table" style="margin-top: 20px">
@@ -160,6 +167,10 @@
 
                 table.appendChild(row);
             }
+        }
+
+        function search_filter(){
+            AJAX_get_posts(1);
         }
 
         function view_post(post_id){
@@ -418,7 +429,7 @@
                 $("#prev-btn").css("visibility", "visible");
             }
 
-            if(currentPage == totalPages){
+            if(currentPage == totalPages || totalPages == 0){
                 $("#last-btn").css("visibility", "hidden");
                 $("#next-btn").css("visibility", "hidden");
             }else{
@@ -428,17 +439,21 @@
 
             $("#page-btn-container").html("");   // clear all btns
 
+            if(totalPages == 0){
+                return;
+            }
+
             let counter = 1;
 
             var firstBtn = 1;   // the first button in paging btns
             
-            if(currentPage > totalPages - Math.floor(totalPagingBtn / 2)){
+            if(currentPage >= 10 && currentPage > totalPages - Math.floor(totalPagingBtn / 2)){
                 firstBtn = totalPages - totalPagingBtn + 1;
             }else if(currentPage > 5){
                 firstBtn = currentPage - Math.floor(totalPagingBtn / 2);
             }
 
-            while(counter <= totalPagingBtn){
+            while(counter <= totalPagingBtn && firstBtn <= totalPages){
                 var page_btn = "<button class='btn btn-paging' onclick='AJAX_get_posts(" + firstBtn + ")'>" + firstBtn + "</button>";
 
                 if(firstBtn == currentPage){
@@ -452,12 +467,17 @@
             }
         }
 
-        function AJAX_get_posts(pageNumber){
+        function AJAX_get_posts(pageNumber, query){
             currentPage = pageNumber;
+
+            var filter_type = $("#filter_type").val();
+            var search_filter = $("#searchbar").val();
+
+            var query = filter_type + "=" + search_filter;
 
             // AJAX call to get posts
             var xhr = $.ajax({
-                url: "https://gorest.co.in/public/v2/posts?page=" + pageNumber,
+                url: "https://gorest.co.in/public/v2/posts?page=" + pageNumber + "&" + query,
                 method: "GET",
                 headers: {
                     "Authorization": "Bearer b16cef22dd918befa7ed4cad3bb4b161a66a0d49bb582845a8cd7a398b0e8a70"
