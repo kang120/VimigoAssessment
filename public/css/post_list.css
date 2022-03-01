@@ -1,8 +1,19 @@
 #post-list{
     padding-top: 50px;
-    padding-left: 15%;
-    padding-right: 15%;
+    padding-left: 5%;
+    padding-right: 5%;
     padding-bottom: 100px;
+}
+
+.search-box{
+    display: flex;
+    align-items: center;
+}
+
+.searchbar{
+    height: 30px;
+    width: 350px;
+    padding: 15px 5px;
 }
 
 table{
@@ -92,13 +103,13 @@ th, td, tr{
     margin-left: 15px
 }
 
-.btn-paging-ctrl{
+.btn-success{
     background: #1cb87f;
     color: white;
     margin-left: 15px
 }
 
-.btn-paging-ctrl:hover{
+.btn-success:hover{
     background: #26c98e;
 }
 
@@ -109,6 +120,55 @@ th, td, tr{
 #page-btn-container{
     width: 50%;
     text-align: center;
+}
+
+#create-modal{
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    height: 80%;
+    background: #fcfcfc;
+    border: 2px solid black;
+    border-radius: 2%;
+    padding: 40px;
+}
+
+#create-author{
+    margin-left: 20px;
+    padding: 8px 5px;
+}
+
+#create-submit-modal{
+    display: none;
+    flex-direction: column;
+    text-align: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 25%;
+    height: 8%;
+    background: #fcfcfc;
+    border: 2px solid black;
+    border-radius: 2%;
+    padding: 40px;
+}
+
+.result-modal{
+    display: none;
+    text-align: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 7%;
+    background: #fcfcfc;
+    border: 2px solid black;
+    border-radius: 2%;
+    padding: 40px;
 }
 
 #view-modal{
@@ -126,7 +186,7 @@ th, td, tr{
 }
 
 .post-container{
-    height: 85%;
+    height: 80%;
     overflow-y: auto;
     margin-top: 30px;
     padding: 0 15px;
@@ -177,7 +237,7 @@ textarea{
     margin-top: 10px;
 }
 
-#update-title{
+.title-textarea{
     height: 20%;
     font-size: 25px;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -186,27 +246,27 @@ textarea{
     overflow-y: auto;
 }
 
-#update-body{
-    height: 45%;
+.body-textarea{
+    height: 40%;
     padding: 15px;
     text-align: justify;
     overflow-y: auto;
 }
 
-#update-title::-webkit-scrollbar{
+#title-textarea::-webkit-scrollbar{
     width: 10px;
 }
 
-#update-title::-webkit-scrollbar-thumb{
+#title-textarea::-webkit-scrollbar-thumb{
     background: rgb(237, 239, 243);
     height: 50px;
 }
 
-#update-body::-webkit-scrollbar{
+#body-textarea::-webkit-scrollbar{
     width: 10px;
 }
 
-#update-body::-webkit-scrollbar-thumb{
+#body-textarea::-webkit-scrollbar-thumb{
     background: rgb(237, 239, 243);
     height: 50px;
 }
@@ -219,23 +279,8 @@ textarea{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 15%;
+    width: 25%;
     height: 8%;
-    background: #fcfcfc;
-    border: 2px solid black;
-    border-radius: 2%;
-    padding: 40px;
-}
-
-#update-result-modal{
-    display: none;
-    text-align: center;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 15%;
-    height: 7%;
     background: #fcfcfc;
     border: 2px solid black;
     border-radius: 2%;
@@ -249,22 +294,7 @@ textarea{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 15%;
-    height: 7%;
-    background: #fcfcfc;
-    border: 2px solid black;
-    border-radius: 2%;
-    padding: 40px;
-}
-
-#delete-result-modal{
-    display: none;
-    text-align: center;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 15%;
+    width: 25%;
     height: 7%;
     background: #fcfcfc;
     border: 2px solid black;
