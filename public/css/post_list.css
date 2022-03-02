@@ -113,7 +113,7 @@ th, td, tr{
     background: #26c98e;
 }
 
-.btn-currentpage{
+.btn-currentpage, .btn-paging:hover{
     background: #6dc7f7;
 }
 
